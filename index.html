@@ -17,8 +17,8 @@ canvas { width: 100%; height: 100% }
             const three = THREE
 
             const canvas = d3.selectAll("#myCanvas").append("canvas")
-                .style("width", "100%")
-                .style("height", "100%")
+                .style("width", "256px")
+                .style("height", "256px")
             const context = canvas.node().getContext('2d');
             const svg = d3.selectAll("#myCanvas").append("svg")
 
@@ -49,31 +49,31 @@ canvas { width: 100%; height: 100% }
             .style("stroke-width", d => (0.1 + 0.1*Math.random())+"px")
             .style("fill", "none")
     }
-//            for (i = 0; i<5; i++){
-//                custom.append("g")
-//                    .attr("class", "customg")
-//                    .selectAll("circle")
-//                    .data(radii)
-//                    .enter()
-//                    .append("circle")
-//                    .attr("r", d => spacing*d)
-//                    .attr("cx", i == 0 ? center.x - offWall 
-//                        : i < 4 ? center.x 
-//                        : center.x + offWall) 
-//                    .attr("cy", i%2 == 0 ? center.y 
-//                        : i == 1 ? center.y - offWall
-//                        : center.y + offWall)
-//                    .style("stroke", "#000")
-//                    .style("stroke-width", d => (0.1 + 0.1*Math.random())+"px")
-//                    .style("fill", "none")
-//            }
-//            
+            for (i = 0; i<5; i++){
+                custom.append("g")
+                    .attr("class", "customg")
+                    .selectAll("circle")
+                    .data(radii)
+                    .enter()
+                    .append("circle")
+                    .attr("r", d => spacing*d)
+                    .attr("cx", i == 0 ? center.x - offWall 
+                        : i < 4 ? center.x 
+                        : center.x + offWall) 
+                    .attr("cy", i%2 == 0 ? center.y 
+                        : i == 1 ? center.y - offWall
+                        : center.y + offWall)
+                    .style("stroke", "#000")
+                    .style("stroke-width", d => (0.1 + 0.1*Math.random())+"px")
+                    .style("fill", "none")
+            }
+            
 var img = new Image();
 img.onload = function() {
         context.drawImage(img, 0, 0);
 }
-img.src = "data:image/svg+xml;base64,"+btoa(svg.node().outerHTML);
-
+img.src = "data:image/svg+xml;charset=utf-8,"+(new XMLSerializer).serializeToString(svg.node());
+context.drawImage(img, 0, 0, 256, 256)
 //            context.fillStyle = '#fff';
 //            context.fillRect(0, 0, width, height);
 
@@ -93,16 +93,23 @@ img.src = "data:image/svg+xml;base64,"+btoa(svg.node().outerHTML);
 
             var scene = new THREE.Scene();
             var camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, 1000 );
+            camera.lookAt(scene.position)
             var light = new THREE.AmbientLight();
             var renderer = new THREE.WebGLRenderer();
             renderer.setSize( window.innerWidth, window.innerHeight );
             document.body.appendChild( renderer.domElement );
 
-            var geometry = new THREE.BoxGeometry( 2, 1, 2 );
+elements.each( function (element, i) {
+    var obj = new THREE.CSS3DObject( element )
+})
+
+
+//            var geometry = new THREE.BoxGeometry( 2, 1, 2 );
 //            var material = new THREE.MeshPhongMaterial( { color: 0x00ffff, wireframe: true } );
-            var texture = new THREE.Texture(canvas)
-            var material = new THREE.MeshBasicMaterial( {map: texture} )
-            var cube = new THREE.Mesh( geometry, material );
+////            var texture = new THREE.TextureLoader().load(img.src)
+//            var texture = new THREE.CanvasTexture(canvas)
+//            var material = new THREE.MeshPhongMaterial( {map: texture, color: 0xffffff} )
+//            var cube = new THREE.Mesh( geometry, material );
             scene.add( cube );
             scene.add( light );
 
